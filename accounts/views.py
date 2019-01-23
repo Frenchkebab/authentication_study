@@ -2,9 +2,12 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from django.views.generic import CreateView
 from django.shortcuts import redirect, render
 
-def signup(request):
+# 방법1 : FBV
+""" def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -14,7 +17,13 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'accounts/signup.html', {
         'form' : form,
-    })
+    }) """
+
+# 방법2 : CBV
+signup = CreateView.as_view(model=User, 
+form_class=UserCreationForm,
+success_url=settings.LOGIN_URL,
+template_name='accounts/signup.html')    
 
 @login_required
 
